@@ -19,7 +19,6 @@
             margin: 0;
             padding: 10px;
             color: var(--text-color);
-            -webkit-user-select: none;
             font-size: 15px;
         }
 
@@ -27,7 +26,7 @@
             max-width: 650px;
             margin: 0 auto;
             background: var(--card-bg);
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
@@ -45,7 +44,7 @@
         }
 
         h1 {
-            font-size: 17px;
+            font-size: 18px;
             text-align: center;
             color: var(--primary-gold);
             margin-top: 10px;
@@ -53,54 +52,65 @@
         }
 
         h2 {
-            font-size: 14px;
+            font-size: 15px;
             background-color: var(--primary-gold);
             color: white;
-            padding: 6px;
+            padding: 8px;
             border-radius: 5px;
-            margin-top: 20px;
+            margin-top: 25px;
             text-transform: uppercase;
         }
 
-        .section-text {
-            font-size: 13px;
-            line-height: 1.5;
-            margin: 10px 0;
-            text-align: justify;
-        }
-
-        .field-group { margin-bottom: 12px; }
+        .field-group { margin-bottom: 15px; }
 
         label {
             display: block;
             font-weight: bold;
-            margin-bottom: 4px;
+            margin-bottom: 5px;
             font-size: 13px;
         }
 
-        input {
+        input[type="text"], input[type="date"], input[type="number"], input[type="time"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 14px;
+            font-size: 15px;
             background-color: #fafafa;
             font-family: inherit;
         }
 
-        .obs-box {
-            background-color: #fdfdfd;
-            border: 1px solid #ddd;
-            padding: 12px;
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 10px;
             border-radius: 6px;
-            margin: 15px 0;
+            border: 1px solid #eee;
             font-size: 13px;
+        }
+
+        .obs-section {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 13px;
+            line-height: 1.6;
         }
 
         .critical-alert {
             color: #b71c1c;
             font-weight: bold;
+            text-decoration: underline;
         }
 
         .pix-box {
@@ -109,40 +119,31 @@
             padding: 15px;
             border-radius: 6px;
             margin-top: 15px;
-            font-size: 13px;
         }
 
-        .signature-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 30px;
-            text-align: center;
-            font-size: 12px;
-        }
+        .signature-area { margin-top: 30px; text-align: center; }
 
         canvas#signature-pad {
             border: 1px solid #ccc;
             background-color: #fff;
             width: 100%;
-            height: 100px;
+            height: 120px;
             border-radius: 5px;
         }
 
         .action-buttons {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 10px;
-            margin-top: 30px;
+            margin-top: 40px;
         }
 
         button.action-btn {
-            padding: 12px 5px;
+            padding: 15px;
             border: none;
             border-radius: 8px;
             color: white;
             font-weight: bold;
-            font-size: 12px;
             cursor: pointer;
             font-family: inherit;
         }
@@ -150,12 +151,21 @@
         .btn-save { background-color: #28a745; }
         .btn-print { background-color: #34495e; }
         .btn-send { background-color: #17a2b8; }
-        .btn-word { background-color: #2b579a; } /* Cor do Word */
+
+        /* Estilo para quando as informações forem preenchidas (Modo Contrato) */
+        .filled-text {
+            font-weight: normal;
+            border-bottom: 1px solid #ccc;
+            display: inline-block;
+            min-width: 100px;
+            color: #000;
+        }
 
         @media print {
-            .action-buttons, .no-print { display: none !important; }
+            .action-buttons, .btn-clear, .no-print { display: none !important; }
             body { background: white; padding: 0; }
-            .container { box-shadow: none; border: none; }
+            .container { box-shadow: none; border: none; max-width: 100%; }
+            input { border: none !important; background: transparent !important; padding: 0 !important; }
         }
     </style>
 </head>
@@ -173,125 +183,89 @@
     
     <div class="field-group">
         <label>Nome do Contratante:</label>
-        <input type="text" id="input-nome" value="Márcia Gadilno da Silva">
+        <input type="text" id="nome" placeholder="Nome completo">
     </div>
-
+    
     <div class="field-group">
         <label>Endereço do Evento:</label>
-        <input type="text" id="input-endereco" value="Rua A pontezinha">
+        <input type="text" id="endereco" placeholder="Endereço Completo">
     </div>
 
     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
         <div class="field-group">
             <label>Data:</label>
-            <input type="date" id="input-data" value=" ">
+            <input type="date" id="data">
         </div>
         <div class="field-group">
             <label>Horário:</label>
-            <input type="text" id="input-horario" value=" ">
+            <input type="time" id="horario">
         </div>
         <div class="field-group">
             <label>Convidados:</label>
-            <input type="number" id="input-convidados" value=" ">
+            <input type="number" id="convidados" placeholder="Qtd">
         </div>
     </div>
 
-    <div class="field-group">
-        <label>E-mail:</label>
-        <input type="email" id="input-email" value=" ">
+    <h2>CONDIÇÕES E REGRAS DO SERVIÇO</h2>
+    <div class="obs-section">
+        <strong>OBSERVAÇÕES IMPORTANTES:</strong><br>
+        O fornecimento do gelo para os drinks é de <strong>responsabilidade do cliente</strong>, considerando que realizamos mais de um evento por dia e não dispomos de condições logísticas para o transporte adequado do gelo.<br><br>
+
+        <strong>LOCAL DA FESTA É OBRIGATÓRIO CONTER:</strong><br>
+        • Fogão com gás | • Freezer | • Pia<br>
+        <span class="critical-alert">(Sujeito a multa de 15% sobre o valor do pacote na falta de algum desses itens sem a comunicação prévia no momento contratual).</span>
     </div>
 
-    <h2>SERVIÇOS E PACOTE</h2>
-    <div class="section-text">
-        <strong>Pacote Contratado:</strong> <br>
-        <strong>Serviços Inclusos:</strong> 
-    </div>
-
-    <div class="obs-box">
-        <strong>ITENS DO CARDÁPIO:</strong><br>
-        <strong>DRINKS (Frutas):</strong> 
-    </div>
-
-    <h2>OBSERVAÇÕES E REGRAS</h2>
-    <div class="section-text">
-        <ul>
-            <li><strong>GELO:</strong> Responsabilidade do cliente.</li>
-            <li><strong>ESTRUTURA:</strong> Fogão com gás, Freezer e Pia obrigatórios.</li>
-            <li><strong>TAXA DE LOCOMOÇÃO:</strong> R$ 100,00.</li>
-            <li><strong>EXCEDENTE:</strong> R$ 35,00 por convidado extra.</li>
-            <li><strong>CANCELAMENTO:</strong> Não fazemos devolução de quantia paga.</li>
-        </ul>
+    <div class="obs-section">
+        <strong>TAXA DE LOCOMOÇÃO:</strong> R$ 100,00
     </div>
 
     <h2>VALORES E PAGAMENTO</h2>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
         <div class="field-group">
             <label>Valor Total:</label>
-            <input type="text" id="val-total" value="R$ ">
+            <input type="text" id="valor_total" placeholder="R$ 0,00">
         </div>
         <div class="field-group">
             <label>Entrada Paga:</label>
-            <input type="text" id="val-entrada" value="R$ ">
+            <input type="text" id="entrada" placeholder="R$ 0,00">
         </div>
     </div>
 
     <div class="pix-box">
-        <strong>PAGAMENTO (PIX):</strong> 81994539257<br>
-        <span class="critical-alert">Vencimento do restante: 05/03</span>
+        <strong>Dados para Pagamento (Pix):</strong><br>
+        Chave Pix: 81994539257<br>
+        Favorecida: Valquíria Gomes da Silva<br>
+        <small>* A reserva da data só é confirmada mediante pagamento do sinal.</small>
     </div>
 
-    <div class="signature-grid">
-        <div>
-            <canvas id="signature-pad"></canvas>
-            <p>___________________<br>CONTRATANTE</p>
-        </div>
-        <div>
-            <div style="height: 100px; display: flex; align-items: center; justify-content: center;"><strong>Celebrar Buffet</strong></div>
-            <p>___________________<br>CONTRATADO</p>
-        </div>
+    <div class="signature-area">
+        <label>Assinatura do Cliente:</label>
+        <canvas id="signature-pad"></canvas>
+        <button class="no-print" onclick="clearSignature()" style="margin-top:5px;">Limpar Assinatura</button>
     </div>
 
-    <div class="action-buttons no-print">
-        <button class="action-btn btn-save" onclick="alert('Salvo!')">💾 Salvar</button>
-        <button class="action-btn btn-word" onclick="exportarWord()">📝 Gerar Word</button>
+    <div class="action-buttons">
+        <button class="action-btn btn-save" onclick="prepararContrato()">💾 Gerar Contrato</button>
         <button class="action-btn btn-print" onclick="window.print()">🖨️ Imprimir</button>
         <button class="action-btn btn-send" onclick="sendViaWhatsApp()">📲 Enviar PDF</button>
     </div>
+
 </div>
 
 <script>
-    // Função para exportar para Word
-    function exportarWord() {
-        const conteudo = document.getElementById('contract-content').innerHTML;
-        
-        // Estilos básicos para o Word entender o layout
-        const estilos = `
-            <style>
-                body { font-family: 'Times New Roman'; }
-                h1 { color: #c69c6d; text-align: center; }
-                h2 { background-color: #c69c6d; color: white; padding: 5px; }
-                .pix-box { background-color: #d4edda; border: 1px solid #28a745; padding: 10px; }
-                table { width: 100%; border-collapse: collapse; }
-                .no-print { display: none; }
-            </style>
-        `;
-
-        const htmlCompleto = `
-            <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-            <head><meta charset='utf-8'>${estilos}</head>
-            <body>${conteudo}</body>
-            </html>
-        `;
-
-        const blob = new Blob(['\ufeff', htmlCompleto], {
-            type: 'application/msword'
+    // Função para transformar inputs em texto estático antes de imprimir/gerar PDF
+    function prepararContrato() {
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            if(input.value) {
+                const span = document.createElement('span');
+                span.className = 'filled-text';
+                span.innerText = input.value;
+                input.parentNode.replaceChild(span, input);
+            }
         });
-
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'contrato_celebrar.doc';
-        link.click();
+        alert("Contrato formatado! Agora você pode imprimir ou enviar por WhatsApp.");
     }
 
     // Lógica da Assinatura
@@ -304,25 +278,38 @@
         canvas.width = canvas.offsetWidth * ratio;
         canvas.height = canvas.offsetHeight * ratio;
         ctx.scale(ratio, ratio);
-        ctx.strokeStyle = "#000";
         ctx.lineWidth = 2;
     }
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    canvas.addEventListener('mousedown', () => writing = true);
-    canvas.addEventListener('mousemove', (e) => {
-        if (!writing) return;
+    function getPos(e) {
         const rect = canvas.getBoundingClientRect();
-        ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-        ctx.stroke();
-    });
-    window.addEventListener('mouseup', () => { writing = false; ctx.beginPath(); });
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: clientX - rect.left, y: clientY - rect.top };
+    }
 
-    // Enviar PDF (html2pdf)
+    canvas.addEventListener('mousedown', (e) => { writing = true; ctx.beginPath(); const p = getPos(e); ctx.moveTo(p.x, p.y); });
+    canvas.addEventListener('mousemove', (e) => { if(!writing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); });
+    window.addEventListener('mouseup', () => writing = false);
+    
+    // Suporte para Celular
+    canvas.addEventListener('touchstart', (e) => { writing = true; ctx.beginPath(); const p = getPos(e); ctx.moveTo(p.x, p.y); e.preventDefault(); }, {passive: false});
+    canvas.addEventListener('touchmove', (e) => { if(!writing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); e.preventDefault(); }, {passive: false});
+
+    function clearSignature() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+
     function sendViaWhatsApp() {
         const element = document.getElementById('contract-content');
-        html2pdf().from(element).save('contrato_celebrar.pdf');
+        const opt = {
+            margin: 0.3,
+            filename: 'contrato_celebrar.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
     }
 </script>
 
